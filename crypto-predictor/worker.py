@@ -27,7 +27,6 @@ from google.cloud import storage
 
 from logger import Logger
 from recurror import Recurror
-from mediator import Mediator
 
 METADATA_URL_PROJECT = "http://metadata/computeMetadata/v1/project/"
 METADATA_URL_INSTANCE = "http://metadata/computeMetadata/v1/instance/"
@@ -90,7 +89,7 @@ def main(toprocess, subscription, refresh, dataset_id, table_id):
 
     # <Your custom process>
             if event_type == 'OBJECT_FINALIZE':
-                Logger.log_write("PICKKKEEE RICKKKKKK MADAFUCKAAAA!!!")    
+                Logger.log_write("PICKKKEEE RICKKKKKK MADAFUCKAAAA!!! should predict right heree biaaatch")    
                 
     # <End of your custom process>
 
