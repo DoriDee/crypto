@@ -26,9 +26,32 @@ app.set('trust proxy', true);
 
 const api = require('./lib/bittrex_api_runner.js')
 const uploader = require('./lib/uploader.js')
-
+const PubSub = require(`@google-cloud/pubsub`);
 
 // api.reportStats();
+function publishMessage () {
+  // Instantiates a client
+  const pubsub = PubSub();
+
+  // References an existing topic, e.g. "my-topic"
+  const topic = pubsub.topic(config.get('TOPIC_NAME'));
+
+  // Publishes the message, e.g. "Hello, world!" or { amount: 599.00, status: 'pending' }
+  return topic.publish('pickle rick!!')
+    .then((results) => {
+      const messageIds = results[0];
+      console.log(`Message ${messageIds[0]} published.`);
+      return messageIds;
+    });
+}
+
+app.get('/publish', (req, res, next) => {
+  console.log("COOCOO!!!")
+
+  publishMessage();
+
+  res.status(200).send('PICKLE RICKKKKK');
+});
 
 app.use('/report', (req, res, next) => {
   api.reportStats().then(() => {

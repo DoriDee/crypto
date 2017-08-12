@@ -22,6 +22,7 @@
   },
   "dependencies": {
     "@google-cloud/datastore": "~1.0.0",
+    "@google-cloud/pubsub": "^0.13.2",
     "@google-cloud/storage": "~1.1.0",
     "body-parser": "~1.17.1",
     "csv-streamify": "^3.0.4",

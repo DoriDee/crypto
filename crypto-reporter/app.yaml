@@ -18,8 +18,13 @@ env: flex
 skip_files:
  - ^node_modules$
 
+env_variables:
+  PUBSUB_TOPIC: predictions
+  # This token is used to verify that requests originate from your
+  # application. It can be any sufficiently random string.
+  PUBSUB_VERIFICATION_TOKEN: 5d2a1bba-5d02-4d17-a320-886484d6e841
 
-handlers:
-- url: /report
-  script: app.js
-  login: admin
+# handlers:
+# - url: /report
+#   script: app.js
+#   login: admin

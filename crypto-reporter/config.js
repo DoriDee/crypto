@@ -55,6 +55,8 @@ nconf
     BITTREX_API_KEY: '184e13b19103414794d0073688d08d4c',
     BITTREX_API_SECRET: 'd17d178d756c4a859144cf444ae23a8c',
 
+    TOPIC_NAME: 'predictions',
+
     PORT: 8080
   });
 
