@@ -1,6 +1,6 @@
-./crypto-reporter/node_modules/
-./crypto-reporter/node_modules/*
-./CryptoPred-cabed792e75f.json
-./cmle-quickstart/**
-./cmle-quickstart/
-./crypto-predictor/env/**
+crypto-reporter/.DS_Store
+crypto-reporter/node_modules/**
+CryptoPred-cabed792e75f.json
+crypto-predictor/__pycache__/
+cmle-quickstart/
+crypto-predictor/env/**
