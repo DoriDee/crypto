@@ -1,6 +1,6 @@
 ./crypto-reporter/node_modules/
 ./crypto-reporter/node_modules/*
 ./CryptoPred-cabed792e75f.json
-./cmle-quickstart
-./crypto-predictor/env/*
-./crypto-predictor/env/lib/*
+./cmle-quickstart/**
+./cmle-quickstart/
+./crypto-predictor/env/**
