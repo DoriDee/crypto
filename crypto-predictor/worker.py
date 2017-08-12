@@ -51,8 +51,12 @@ INSTANCE_ZONE = INSTANCE_ZONE_URL.split('/')[0]
 def main(toprocess, subscription, refresh, dataset_id, table_id):
     """
     """
+
     subscription_id = "projects/{0}/subscriptions/{1}".format(PROJECT_ID, subscription)
     subscription = pubsub.subscription.Subscription(subscription_id, client=pubsub_client)
+
+    print("WTF??A?A?A?A?A?A?A" + subscription_id)
+    Logger.log_write("Main entry!!!")
 
     if not subscription.exists():
         sys.stderr.write('Cannot find subscription {0}\n'.format(sys.argv[1]))
@@ -63,7 +67,7 @@ def main(toprocess, subscription, refresh, dataset_id, table_id):
     # pull() blocks until a message is received
     while True:
         #[START sub_pull]
-        resp = subscriptions.pull("maxMessages": toprocess)
+        resp = subscription.pull()
         #[END sub_pull]
 
         for ack_id, message in resp:
