@@ -66,7 +66,8 @@ def main(toprocess, subscription, refresh, dataset_id, table_id):
     # pull() blocks until a message is received
     while True:
         #[START sub_pull]
-        resp = subscription.pull()
+        resp = subscriptions.pull()
+        # resp = subscription.pull()
         #[END sub_pull]
 
         Logger.log_writer("pulled it!")
