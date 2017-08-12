@@ -55,7 +55,7 @@ def main(toprocess, subscription, refresh, dataset_id, table_id):
     topic = pubsub_client.topic("predictions")
     sub = topic.subscription("predictions-sub")
 
-    # subscription_id = "projects/{0}/subscriptions/{1}".format(PROJECT_ID, subscription)
+    subscription_id = "projects/{0}/subscriptions/{1}".format(PROJECT_ID, subscription)
     # sub = pubsub.subscription.Subscription(subscription_id, client=pubsub_client)
 
     Logger.log_writer("Main entry!!!" + subscription_id)
@@ -152,8 +152,8 @@ def postpone_ack(params):
     #[END postpone_ack]
 
 """Create the API clients."""
-pubsub_client = pubsub.Client()
-gcs_client = storage.Client()
+pubsub_client = pubsub.Client(PROJECT_ID)
+gcs_client = storage.Client(PROJECT_ID)
 
 """Launch the loop to pull media to process."""
 if __name__ == '__main__':
