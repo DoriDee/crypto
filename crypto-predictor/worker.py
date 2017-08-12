@@ -56,7 +56,7 @@ def main(toprocess, subscription, refresh, dataset_id, table_id):
     subscription = pubsub.subscription.Subscription(subscription_id, client=pubsub_client)
 
     print("WTF??A?A?A?A?A?A?A" + subscription_id)
-    Logger.log_write("Main entry!!!")
+    Logger.log_writer("Main entry!!!")
 
     if not subscription.exists():
         sys.stderr.write('Cannot find subscription {0}\n'.format(sys.argv[1]))
