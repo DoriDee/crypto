@@ -53,11 +53,11 @@ def main(toprocess, subscription, refresh, dataset_id, table_id):
     """
 
     subscription_id = "projects/{0}/subscriptions/{1}".format(PROJECT_ID, subscription)
-    subscription = pubsub.subscription.Subscription(subscription_id, client=pubsub_client)
+    sub = pubsub.subscription.Subscription(subscription_id, client=pubsub_client)
 
     Logger.log_writer("Main entry!!!" + subscription_id)
 
-    if not subscription.exists():
+    if not sub.exists():
         sys.stderr.write('Cannot find subscription {0}\n'.format(sys.argv[1]))
         return
 
@@ -68,7 +68,7 @@ def main(toprocess, subscription, refresh, dataset_id, table_id):
     # pull() blocks until a message is received
     while True:
         #[START sub_pull]
-        resp = subscription.pull()
+        resp = sub.pull()
         # resp = subscription.pull()
         #[END sub_pull]
 
