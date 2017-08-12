@@ -57,16 +57,18 @@ def main(toprocess, subscription, refresh, dataset_id, table_id):
 
     Logger.log_writer("Main entry!!!" + subscription_id)
 
-    if not subscription.exists():
-        sys.stderr.write('Cannot find subscription {0}\n'.format(sys.argv[1]))
-        return
+    # if not subscription.exists():
+        # sys.stderr.write('Cannot find subscription {0}\n'.format(sys.argv[1]))
+        # return
+
+    Logger.log_writer("Wallak exists!!!" + subscription_id)
 
     r = Recurror(refresh - 10, postpone_ack)
 
     # pull() blocks until a message is received
     while True:
         #[START sub_pull]
-        resp = subscriptions.pull()
+        resp = subscription.pull()
         # resp = subscription.pull()
         #[END sub_pull]
 
