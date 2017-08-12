@@ -55,8 +55,7 @@ def main(toprocess, subscription, refresh, dataset_id, table_id):
     subscription_id = "projects/{0}/subscriptions/{1}".format(PROJECT_ID, subscription)
     subscription = pubsub.subscription.Subscription(subscription_id, client=pubsub_client)
 
-    print("WTF??A?A?A?A?A?A?A" + subscription_id)
-    Logger.log_writer("Main entry!!!")
+    Logger.log_writer("Main entry!!!" + subscription_id)
 
     if not subscription.exists():
         sys.stderr.write('Cannot find subscription {0}\n'.format(sys.argv[1]))
@@ -69,6 +68,8 @@ def main(toprocess, subscription, refresh, dataset_id, table_id):
         #[START sub_pull]
         resp = subscription.pull()
         #[END sub_pull]
+
+        Logger.log_writer("pulled it!")
 
         for ack_id, message in resp:
             # We need to do this to get contentType. The rest is in attributes
@@ -93,7 +94,7 @@ def main(toprocess, subscription, refresh, dataset_id, table_id):
 
     # <Your custom process>
             if event_type == 'OBJECT_FINALIZE':
-                Logger.log_write("PICKKKEEE RICKKKKKK MADAFUCKAAAA!!! should predict right heree biaaatch")    
+                Logger.log_writer("PICKKKEEE RICKKKKKK MADAFUCKAAAA!!! should predict right heree biaaatch")    
                 
     # <End of your custom process>
 
