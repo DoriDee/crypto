@@ -78,10 +78,16 @@ def main(toprocess, subscription, refresh, dataset_id, table_id):
         Logger.log_writer("pulled it: {0}".format(resp))
 
         for ack_id, message in resp:
+
+            Logger.log_writer("ack_id:{0} message:{1}".format(ack_id, message))
+
             # We need to do this to get contentType. The rest is in attributes
             #[START msg_format]
             data = message.data
             msg_string = base64.b64decode(data)
+
+            Logger.log_writer("msg_string: {0}".format(msg_string))
+
             msg_data = json.loads(msg_string)
             content_type = msg_data["contentType"]
 
