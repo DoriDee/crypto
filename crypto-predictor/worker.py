@@ -71,7 +71,7 @@ def main(toprocess, subscription, refresh, dataset_id, table_id):
     # pull() blocks until a message is received
     while True:
         #[START sub_pull]
-        resp = sub.pull()
+        resp = sub.pull(return_immediately=False)
         # resp = subscription.pull()
         #[END sub_pull]
 
