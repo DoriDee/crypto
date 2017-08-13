@@ -88,7 +88,7 @@ def main(toprocess, subscription, refresh, dataset_id, table_id):
             Logger.log_writer("msg_data: {0}".format(data))
 
             if (data == 'mmmmm'):
-                subscription.acknowledge([ack_id])
+                sub.acknowledge([ack_id])
                 next
 
             msg_string = base64.b64decode(data)
@@ -122,7 +122,7 @@ def main(toprocess, subscription, refresh, dataset_id, table_id):
 
             #[START ack_msg]
             # Delete the message in the queue by acknowledging it.
-            subscription.acknowledge([ack_id])
+            sub.acknowledge([ack_id])
             #[END ack_msg]
 
             # Write logs only if needed for analytics or debugging
