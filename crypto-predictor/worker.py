@@ -75,7 +75,7 @@ def main(toprocess, subscription, refresh, dataset_id, table_id):
         # resp = subscription.pull()
         #[END sub_pull]
 
-        Logger.log_writer("pulled it!" + resp)
+        Logger.log_writer("pulled it: {0}".format(resp))
 
         for ack_id, message in resp:
             # We need to do this to get contentType. The rest is in attributes
