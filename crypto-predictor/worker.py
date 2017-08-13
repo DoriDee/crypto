@@ -84,6 +84,9 @@ def main(toprocess, subscription, refresh, dataset_id, table_id):
             # We need to do this to get contentType. The rest is in attributes
             #[START msg_format]
             data = message.data
+
+            Logger.log_writer("msg_data: {0}".format(data))
+
             msg_string = base64.b64decode(data)
 
             Logger.log_writer("msg_string: {0}".format(msg_string))
