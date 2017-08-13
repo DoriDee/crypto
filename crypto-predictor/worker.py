@@ -87,6 +87,10 @@ def main(toprocess, subscription, refresh, dataset_id, table_id):
 
             Logger.log_writer("msg_data: {0}".format(data))
 
+            if (data == 'mmmmm'):
+                subscription.acknowledge([ack_id])
+                next
+
             msg_string = base64.b64decode(data)
 
             Logger.log_writer("msg_string: {0}".format(msg_string))
