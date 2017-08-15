@@ -57,9 +57,9 @@ def main():
         sys.stderr.write('Cannot find subscription {0}\n'.format(sys.argv[1]))
         return
 
-    Logger.log_writer("Wallak exists!!!")
+    Logger.log_writer("Wallak exists akakakak!!!")
 
-    # r = Recurror(REFRESH_INTERVAL - 10, postpone_ack)
+    r = Recurror(REFRESH_INTERVAL - 10, postpone_ack)
 
     # pull() blocks until a message is received
     while True:
@@ -148,7 +148,7 @@ def postpone_ack(params):
 
     #[START postpone_ack]
     #Increment the ackDeadLine to make sure that file has time to be processed
-    sub.modifyAckDeadline(ack_ids, refresh)
+    pubsub_client.modifyAckDeadline(sub, ack_ids, refresh)
     #[END postpone_ack]
 
 """Create the API clients."""
