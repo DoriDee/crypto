@@ -79,7 +79,7 @@ def main():
                 Logger.log_writer("msg_data: {0}".format(data))
                 #[END msg_format]
 
-                Logger.log_writer("ACKKKK!!!!!!!!!!!!!!!!")
+                Logger.log_writer("WTFFFFFF mannn I wanna ackk this shittt")
 
                 subscription.acknowledge([ack_id])
 
