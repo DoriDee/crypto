@@ -81,9 +81,6 @@ def main():
 
                 Logger.log_writer("ACKKKK!!!!!!!!!!!!!!!!")
 
-                subscription.acknowledge([ack_id])
-                next
-
                 # Start refreshing the acknowledge deadline.
                 r.start(ack_ids=[ack_id], refresh=REFRESH_INTERVAL, sub=subscription)
 
