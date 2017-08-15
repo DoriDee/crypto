@@ -148,12 +148,7 @@ def postpone_ack(params):
 
     #[START postpone_ack]
     #Increment the ackDeadLine to make sure that file has time to be processed
-    sub.modifyAckDeadline(
-        body={
-            'ackIds': ack_ids,
-            'ackDeadlineSeconds': refresh
-        }
-    ).execute()
+    sub.modifyAckDeadline(ack_ids, refresh)
     #[END postpone_ack]
 
 """Create the API clients."""
