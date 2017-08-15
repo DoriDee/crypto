@@ -40,11 +40,11 @@ INSTANCE_ZONE_URL = requests.get(METADATA_URL_INSTANCE + 'zone', headers=METADTA
 INSTANCE_ZONE = INSTANCE_ZONE_URL.split('/')[0]
 TOPIC_NAME = 'predictions'
 SUBSCRIPTION_NAME = 'predictions-sub'
+REFRESH_INTERVAL = 25
 
 def main():
     """
     """
-    refresh = 25
 
     topic = pubsub_client.topic(TOPIC_NAME)
     subscription = topic.subscription(SUBSCRIPTION_NAME)
@@ -57,7 +57,7 @@ def main():
 
     Logger.log_writer("Wallak exists!!!")
 
-    r = Recurror(refresh - 10, postpone_ack)
+    r = Recurror(REFRESH_INTERVAL - 10, postpone_ack)
 
     # pull() blocks until a message is received
     while True:
@@ -77,7 +77,7 @@ def main():
             #[END msg_format]
 
             # Start refreshing the acknowledge deadline.
-            r.start(ack_ids=[ack_id], refresh=refresh, sub=subscription)
+            r.start(ack_ids=[ack_id], refresh=REFRESH_INTERVAL, sub=subscription)
 
             start_process = datetime.datetime.now()
 
