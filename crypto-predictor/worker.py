@@ -79,6 +79,8 @@ def main():
                 Logger.log_writer("msg_data: {0}".format(data))
                 #[END msg_format]
 
+                Logger.log_writer("ACKKKK!!!!!!!!!!!!!!!!")
+
                 subscription.acknowledge([ack_id])
                 next
 
@@ -146,8 +148,7 @@ def postpone_ack(params):
 
     #[START postpone_ack]
     #Increment the ackDeadLine to make sure that file has time to be processed
-    pubsub_client.subscriptions().modifyAckDeadline(
-        subscription=sub,
+    sub.modifyAckDeadline(
         body={
             'ackIds': ack_ids,
             'ackDeadlineSeconds': refresh
