@@ -1,4 +1,5 @@
 google-cloud
+google-cloud-error-reporting
 google-api-python-client==1.6.2
 Flask==0.12.1
 requests[security]==2.13.0

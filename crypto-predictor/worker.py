@@ -143,7 +143,7 @@ def postpone_ack(params):
 
     #[START postpone_ack]
     #Increment the ackDeadLine to make sure that file has time to be processed
-    pubsub_client.projects().subscriptions().modifyAckDeadline(
+    pubsub_client.subscriptions().modifyAckDeadline(
         subscription=sub,
         body={
             'ackIds': ack_ids,
