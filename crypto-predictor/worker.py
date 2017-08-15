@@ -59,7 +59,7 @@ def main():
 
     Logger.log_writer("Wallak exists!!!")
 
-    r = Recurror(REFRESH_INTERVAL - 10, postpone_ack)
+    # r = Recurror(REFRESH_INTERVAL - 10, postpone_ack)
 
     # pull() blocks until a message is received
     while True:
