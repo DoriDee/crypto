@@ -79,6 +79,9 @@ def main():
                 Logger.log_writer("msg_data: {0}".format(data))
                 #[END msg_format]
 
+                subscription.acknowledge([ack_id])
+                next
+
                 # Start refreshing the acknowledge deadline.
                 r.start(ack_ids=[ack_id], refresh=REFRESH_INTERVAL, sub=subscription)
 
