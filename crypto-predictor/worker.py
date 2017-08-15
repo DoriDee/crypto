@@ -38,43 +38,31 @@ INSTANCE_ID = requests.get(METADATA_URL_INSTANCE + 'id', headers=METADTA_FLAVOR)
 INSTANCE_NAME = requests.get(METADATA_URL_INSTANCE + 'hostname', headers=METADTA_FLAVOR).text
 INSTANCE_ZONE_URL = requests.get(METADATA_URL_INSTANCE + 'zone', headers=METADTA_FLAVOR).text
 INSTANCE_ZONE = INSTANCE_ZONE_URL.split('/')[0]
+TOPIC_NAME = 'predictions'
+SUBSCRIPTION_NAME = 'predictions-sub'
 
-# Parameters to call with the script
-@click.command()
-@click.option('--toprocess', default=1,
-              help='Number of medias to process on one instance at a time - Not implemented')
-@click.option('--subscription', required=True, help='Name of the subscription to get new messages')
-@click.option('--refresh', default=25, help='Acknowledge deadline refresh time')
-@click.option('--dataset_id', default='media_processing', help='Name of the dataset where to save transcript')
-@click.option('--table_id', default='speech', help='Name of the table where to save transcript')
-
-def main(toprocess, subscription, refresh, dataset_id, table_id):
+def main():
     """
     """
+    refresh = 25
 
-    topic = pubsub_client.topic("predictions")
-    sub = topic.subscription("predictions-sub")
+    topic = pubsub_client.topic(TOPIC_NAME)
+    subscription = topic.subscription(SUBSCRIPTION_NAME)
 
-    subscription_id = "projects/{0}/subscriptions/{1}".format(PROJECT_ID, subscription)
-    # sub = pubsub.subscription.Subscription(subscription_id, client=pubsub_client)
+    Logger.log_writer("Main entry!!!")
 
-    Logger.log_writer("Main entry!!!" + subscription_id)
-
-    if not sub.exists():
+    if not subscription.exists():
         sys.stderr.write('Cannot find subscription {0}\n'.format(sys.argv[1]))
         return
 
-    Logger.log_writer("Wallak exists!!!" + subscription_id)
+    Logger.log_writer("Wallak exists!!!")
 
     r = Recurror(refresh - 10, postpone_ack)
 
     # pull() blocks until a message is received
     while True:
-        #[START sub_pull]
-        resp = sub.pull(return_immediately=False)
-        # resp = subscription.pull()
-        #[END sub_pull]
-
+        resp = subscription.pull(return_immediately=False)
+        
         Logger.log_writer("pulled it: {0}".format(resp))
 
         for ack_id, message in resp:
@@ -86,50 +74,26 @@ def main(toprocess, subscription, refresh, dataset_id, table_id):
             data = message.data
 
             Logger.log_writer("msg_data: {0}".format(data))
-
-            if (data == 'mmmmm'):
-                sub.acknowledge([ack_id])
-                next
-
-            msg_string = base64.b64decode(data)
-
-            Logger.log_writer("msg_string: {0}".format(msg_string))
-
-            msg_data = json.loads(msg_string)
-            content_type = msg_data["contentType"]
-
-            attributes = message.attributes
-            event_type = attributes['eventType']
-            bucket_id = attributes['bucketId']
-            object_id = attributes['objectId']
-            generation = attributes['objectGeneration']
             #[END msg_format]
 
             # Start refreshing the acknowledge deadline.
-            r.start(ack_ids=[ack_id], refresh=refresh, sub=sub)
+            r.start(ack_ids=[ack_id], refresh=refresh, sub=subscription)
 
-            Logger.log_writer("{0} process starts".format(object_id))
             start_process = datetime.datetime.now()
 
-    # <Your custom process>
-            if event_type == 'OBJECT_FINALIZE':
-                Logger.log_writer("PICKKKEEE RICKKKKKK MADAFUCKAAAA!!! should predict right heree biaaatch")    
-                
-    # <End of your custom process>
-
+            Logger.log_writer("Predicting....")
+    
             end_process = datetime.datetime.now()
-            Logger.log_writer("{0} process stops".format(object_id))
 
             #[START ack_msg]
             # Delete the message in the queue by acknowledging it.
-            sub.acknowledge([ack_id])
+            subscription.acknowledge([ack_id])
             #[END ack_msg]
 
             # Write logs only if needed for analytics or debugging
             Logger.log_writer(
-                "{media_url} processed by instance {instance_hostname} in {amount_time}"
+                "processed by instance {instance_hostname} in {amount_time}"
                 .format(
-                    media_url=msg_string,
                     instance_hostname=INSTANCE_NAME,
                     amount_time=str(end_process - start_process)
                 )
@@ -137,6 +101,25 @@ def main(toprocess, subscription, refresh, dataset_id, table_id):
 
             # Stop the ackDeadLine refresh until next message.
             r.stop()
+
+# https://github.com/GoogleCloudPlatform/pubsub-media-processing/blob/master/worker.py
+def parse_bucket_object(params):
+    # msg_data: { "kind": "storage#object", "id": "coins-history/README.md/1502556022304897", 
+    # "selfLink": "https://www.googleapis.com/storage/v1/b/coins-history/o/README.md", 
+    # "name": "README.md", "bucket": "coins-history", "generation": "1502556022304897", 
+    # "metageneration": "1", "contentType": "application/octet-stream", 
+    # "timeCreated": "2017-08-12T16:40:22.283Z", "updated": "2017-08-12T16:40:22.283Z", 
+    # "storageClass": "REGIONAL", "timeStorageClassUpdated": "2017-08-12T16:40:22.283Z",
+    #  "size": "9", "md5Hash": "O2QO+au3DPjNmLNCSWkTHg==", 
+    # "mediaLink": "https://www.googleapis.com/download/storage/v1/b/coins-history/o/README.md?generation=1502556022304897&alt=media",
+    #  "crc32c": "JdSPcQ==", "etag": "CIHh26+R0tUCEAE=" }
+    msg_data = json.loads(params)
+    content_type = msg_data["contentType"]
+    # <Your custom process>
+    if event_type == 'OBJECT_FINALIZE':
+        Logger.log_writer("PICKKKEEE RICKKKKKK MADAFUCKAAAA!!! should predict right heree biaaatch")                    
+    # <End of your custom process>
+
 
 def postpone_ack(params):
     """Postpone the acknowledge deadline until the media is processed
