@@ -29,6 +29,8 @@ from google.cloud import error_reporting
 from logger import Logger
 from recurror import Recurror
 
+import predictor
+
 METADATA_URL_PROJECT = "http://metadata/computeMetadata/v1/project/"
 METADATA_URL_INSTANCE = "http://metadata/computeMetadata/v1/instance/"
 METADTA_FLAVOR = {'Metadata-Flavor' : 'Google'}
@@ -41,11 +43,14 @@ INSTANCE_ZONE_URL = requests.get(METADATA_URL_INSTANCE + 'zone', headers=METADTA
 INSTANCE_ZONE = INSTANCE_ZONE_URL.split('/')[0]
 TOPIC_NAME = 'predictions'
 SUBSCRIPTION_NAME = 'predictions-sub'
+BUCKET_NAME = 'coins-history'
+
 REFRESH_INTERVAL = 25
 
 def main():
     """
     """
+
     client = error_reporting.Client()
             
     topic = pubsub_client.topic(TOPIC_NAME)
@@ -79,20 +84,14 @@ def main():
                 Logger.log_writer("msg_data: {0}".format(data))
                 #[END msg_format]
 
-                Logger.log_writer("WTFFFFFF mannn I wanna ackk this shittt")
-
-                subscription.acknowledge([ack_id])
-
-                Logger.log_writer("KOSOMOOO!!!!!!!!!!!!!!!!!!!")
-
-                next
-
                 # Start refreshing the acknowledge deadline.
                 r.start(ack_ids=[ack_id], refresh=REFRESH_INTERVAL, sub=subscription)
 
                 start_process = datetime.datetime.now()
 
                 Logger.log_writer("Predicting....")
+
+                parse_files()
         
                 end_process = datetime.datetime.now()
 
@@ -114,6 +113,24 @@ def main():
                 r.stop()
         except Exception:
             client.report_exception()
+
+
+def parse_files():
+    bucket = gcs_client.get_bucket(BUCKET_NAME)
+    blobs = bucket.list_blobs()
+
+    Logger.log_writer("Reading bucket files....")
+
+    for blob in blobs:
+
+        Logger.log_writer("fileName:" + blob.name)
+
+        if blob.name == "LTC.csv":
+            blob.download_to_filename(blob.name)
+            last_value, prediction, market_cap = predictor.predict(blob.name)
+
+            Logger.log_writer("Created a prediction for:{0} last_value:{1} prediction:{2} marketcap:{3}".format(blob.name,last_value,prediction,market_cap))
+
 
 # https://github.com/GoogleCloudPlatform/pubsub-media-processing/blob/master/worker.py
 def parse_bucket_object(params):
