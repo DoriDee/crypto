@@ -86,6 +86,3 @@ def predict(file_name):
     print(trainPredict[-1,-1])
 
     return last_value, trainPredict[-1,-1], market_cap
-
-
-predict('LTC.csv')
