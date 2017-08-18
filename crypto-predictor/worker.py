@@ -126,7 +126,13 @@ def parse_files():
         Logger.log_writer("fileName:" + blob.name)
 
         if blob.name == "LTC.csv":
+
+            Logger.log_writer("Downloading...")
+
             blob.download_to_filename(blob.name)
+
+            Logger.log_writer("Downloaded! Predicting...")
+
             last_value, prediction, market_cap = predictor.predict(blob.name)
 
             Logger.log_writer("Created a prediction for:{0} last_value:{1} prediction:{2} marketcap:{3}".format(blob.name,last_value,prediction,market_cap))
