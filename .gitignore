@@ -3,4 +3,6 @@ crypto-reporter/node_modules/**
 CryptoPred-cabed792e75f.json
 crypto-predictor/__pycache__/
 cmle-quickstart/
+
 crypto-predictor/env/**
+crypto-predictor/venv/**
