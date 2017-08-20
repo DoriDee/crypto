@@ -18,7 +18,13 @@ def get_last_row(csv_filename):
 
 def load_dataset(file_name):
     # load the dataset
-    dataframe = read_csv(file_name, usecols=[2], engine='python', skipfooter=False, keep_default_na=False)
+    dataframe = read_csv(file_name, 
+                         usecols=[2],
+                        engine='python',
+                        dialect=csv.excel_tab,
+                        skipfooter=False,
+                        keep_default_na=False,
+                        skip_blank_lines=True)
     
     dataset = dataframe.values
     dataset = dataset.astype('float32')
