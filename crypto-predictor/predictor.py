@@ -9,7 +9,7 @@ import csv
 from logger import Logger
 
 def get_last_row(csv_filename):
-    with open(csv_filename, 'r') as f:
+    with open(csv_filename, 'rU') as f:
         try:
             lastrow = deque(csv.reader(f), 1)[0]
         except IndexError:  # empty file
