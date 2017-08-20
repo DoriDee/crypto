@@ -6,6 +6,7 @@ from sklearn.preprocessing import MinMaxScaler
 
 from collections import deque
 import csv
+from logger import Logger
 
 def get_last_row(csv_filename):
     with open(csv_filename, 'r') as f:
@@ -51,7 +52,12 @@ def create_dataset(dataset, seq_len=1, predict_next = False):
 
 def predict(file_name):
     
+    Logger.log_writer("predictor#getting last row!")
+
     last_row = get_last_row(file_name)
+
+    Logger.log_writer("predictor#got last row!")
+    Logger.log_writer(last_row)
 
     last_value = last_row[2]
     market_cap = last_row[-1]
@@ -61,6 +67,8 @@ def predict(file_name):
     
     seq_len = 50
     
+    Logger.log_writer("predictor#Loading dataset..")
+
     dataset = load_dataset(file_name)
 
     # last_value = dataset[-1]
@@ -70,19 +78,26 @@ def predict(file_name):
 
     feature_num = dataset.shape[1]
 
+    Logger.log_writer("predictor#Preparing data..")
+    
     trainX, trainY = prepare_data(dataset, seq_len)
 
     import lstm
 
+    Logger.log_writer("predictor#Building model..")
+    
     model = lstm.build_model2([1, 50, 100, 1])
     # model.fit(trainX, trainY, epochs=1, batch_size=1, verbose=2)
     model.fit(trainX, trainY, epochs=10, batch_size=1, verbose=2)
 
+    Logger.log_writer("predictor#predicting..")
+    
     trainPredict = model.predict(trainX)    
     trainPredict = scaler.inverse_transform(trainPredict)
 
-    print(trainPredict)
-    print("coocoooo!")
+    Logger.log_writer("predictor#predicted!")
+    print("predictor#coocoooo!")
+    Logger.log_writer(trainPredict[-1,-1])
     print(trainPredict[-1,-1])
 
     return last_value, trainPredict[-1,-1], market_cap
