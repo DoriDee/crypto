@@ -57,10 +57,12 @@ def predict(file_name):
     last_row = get_last_row(file_name)
 
     Logger.log_writer("predictor#got last row!")
-    Logger.log_writer(last_row)
-
+    
     last_value = last_row[2]
     market_cap = last_row[-1]
+
+    Logger.log_writer("last_value:{0}".format(last_value))
+    Logger.log_writer("market_cap:{0}".format(market_cap))
 
     print("last_value:{0}".format(last_value))
     print("market_cap:{0}".format(market_cap))
