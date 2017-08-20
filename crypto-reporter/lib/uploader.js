@@ -103,7 +103,7 @@ function _appendToCSV(remoteWriteStream, currentDate, price, high, low, volume, 
     var writer = csvWriter({sendHeaders: false})
     writer.pipe(remoteWriteStream)
     writer.end({date: currentDate,
-                dummy: '----', 
+                dummy: 666666, 
                 price: price,
                 high: high,
                 low: low,
