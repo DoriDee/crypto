@@ -102,9 +102,9 @@ def predict(file_name):
 
     Logger.log_writer("predictor#predicted!")
     print("predictor#coocoooo!")
-    print(trainPredict[-1,-1])
-
-    Logger.log_writer("predictor#done! lastValue:{0}, pred: {1}, cap: {2}".format(last_value, trainPredict[-1,-1], market_cap))
+    # print(trainPredict[-1,-1])
+    prediction = trainPredict[-1,-1]
+    Logger.log_writer("predictor#done! lastValue:{0}, pred: {1}, cap: {2}".format(last_value, prediction, market_cap))
     
-    return last_value, trainPredict[-1,-1], market_cap
+    return last_value, prediction, market_cap
 
