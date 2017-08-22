@@ -93,7 +93,7 @@ def predict(file_name):
     
     model = lstm.build_model2([1, 50, 100, 1])
     # model.fit(trainX, trainY, epochs=1, batch_size=1, verbose=2)
-    model.fit(trainX, trainY, epochs=10, batch_size=1, verbose=2)
+    model.fit(trainX, trainY, epochs=20, batch_size=32, verbose=2)
 
     Logger.log_writer("predictor#predicting..")
     
