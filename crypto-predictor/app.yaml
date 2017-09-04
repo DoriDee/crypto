@@ -25,3 +25,12 @@ env_variables:
   # This token is used to verify that requests originate from your
   # application. It can be any sufficiently random string.
   PUBSUB_VERIFICATION_TOKEN: 5d2a1bba-5d02-4d17-a320-886484d6e841
+
+
+beta_settings:
+  # If using Cloud SQL, uncomment and set this value to the Cloud SQL
+  # connection name, e.g.
+  #   "project:region:cloudsql-instance"
+  # You must also update the values in config.py.
+  #
+  cloud_sql_instances: "cryptopred:us-central1:cryptodb"

@@ -30,6 +30,7 @@ from logger import Logger
 from recurror import Recurror
 
 import predictor
+import model_predictions
 
 METADATA_URL_PROJECT = "http://metadata/computeMetadata/v1/project/"
 METADATA_URL_INSTANCE = "http://metadata/computeMetadata/v1/instance/"
@@ -52,7 +53,13 @@ def main():
     """
 
     client = error_reporting.Client()
-            
+
+    data = {'coin_symbol': 'LTC', 'last_value': 555, 'prediction': 1231, 'real_value': 123, 'market_cap': 11919, 'predicted_at': datetime.datetime.now()}
+
+    model_predictions.connect()
+    prediction = model_predictions.create(data)
+
+    return
     topic = pubsub_client.topic(TOPIC_NAME)
     subscription = topic.subscription(SUBSCRIPTION_NAME)
 
