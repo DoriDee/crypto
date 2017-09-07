@@ -23,7 +23,7 @@ DB_IP = "104.155.151.224"
 # instance.
 LIVE_SQLALCHEMY_DATABASE_URI = (
     'postgresql://{user}:{password}@{ip}/{database}').format(
-        user=CLOUDSQL_USER, password=CLOUDSQL_PASSWORD,
+        user=CLOUDSQL_USER, password=CLOUDSQL_PASSWORD, ip=DB_IP,
         database=CLOUDSQL_DATABASE, connection_name=CLOUDSQL_CONNECTION_NAME)
 
 # if os.environ.get('GAE_INSTANCE'):
