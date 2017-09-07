@@ -74,52 +74,54 @@ def main():
     r = Recurror(REFRESH_INTERVAL - 10, postpone_ack)
 
     # pull() blocks until a message is received
-    while True:
-        try:            
-            resp = subscription.pull(return_immediately=False)
-            
-            Logger.log_writer("pulled it: {0}".format(resp))
-
-            for ack_id, message in resp:
-
-                Logger.log_writer("ack_id:{0} message:{1}".format(ack_id, message))
-
-                # We need to do this to get contentType. The rest is in attributes
-                #[START msg_format]
-                data = message.data
-
-                Logger.log_writer("msg_data: {0}".format(data))
-                #[END msg_format]
-
-                # Start refreshing the acknowledge deadline.
-                r.start(ack_ids=[ack_id], refresh=REFRESH_INTERVAL, sub=subscription)
-
-                start_process = datetime.datetime.now()
-
-                Logger.log_writer("Predicting....")
-
-                parse_files()
+    # while True:
+    try:            
+        resp = subscription.pull(return_immediately=False)
         
-                end_process = datetime.datetime.now()
+        Logger.log_writer("pulled it: {0}".format(resp))
 
-                #[START ack_msg]
-                # Delete the message in the queue by acknowledging it.
-                subscription.acknowledge([ack_id])
-                #[END ack_msg]
+        for ack_id, message in resp:
 
-                # Write logs only if needed for analytics or debugging
-                Logger.log_writer(
-                    "processed by instance {instance_hostname} in {amount_time}"
-                    .format(
-                        instance_hostname=INSTANCE_NAME,
-                        amount_time=str(end_process - start_process)
-                    )
+            Logger.log_writer("ack_id:{0} message:{1}".format(ack_id, message))
+
+            # We need to do this to get contentType. The rest is in attributes
+            #[START msg_format]
+            data = message.data
+
+            Logger.log_writer("msg_data: {0}".format(data))
+            #[END msg_format]
+
+            # Start refreshing the acknowledge deadline.
+            r.start(ack_ids=[ack_id], refresh=REFRESH_INTERVAL, sub=subscription)
+
+            start_process = datetime.datetime.now()
+
+            Logger.log_writer("Predicting....")
+
+            parse_files()
+    
+            end_process = datetime.datetime.now()
+
+            #[START ack_msg]
+            # Delete the message in the queue by acknowledging it.
+            subscription.acknowledge([ack_id])
+            #[END ack_msg]
+
+            # Write logs only if needed for analytics or debugging
+            Logger.log_writer(
+                "processed by instance {instance_hostname} in {amount_time}"
+                .format(
+                    instance_hostname=INSTANCE_NAME,
+                    amount_time=str(end_process - start_process)
                 )
+            )
 
-                # Stop the ackDeadLine refresh until next message.
-                r.stop()
-        except Exception:
-            client.report_exception()
+            # Stop the ackDeadLine refresh until next message.
+            r.stop()
+
+            # https://cloud.google.com/compute/docs/reference/beta/instances/stop#examples
+    except Exception:
+        client.report_exception()
 
 
 def parse_files():
