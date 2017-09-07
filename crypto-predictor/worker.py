@@ -53,7 +53,7 @@ def main():
     """
 
     client = error_reporting.Client()
-    #COOCOOOOO!!!!!!!
+    #COOCOOOOO!!!!!!! WAT???
     data = {'coin_symbol': 'LTC', 'last_value': 555, 'prediction': 1231, 'real_value': 123, 'market_cap': 11919, 'predicted_at': datetime.datetime.now()}
 
     model_predictions.connect()
