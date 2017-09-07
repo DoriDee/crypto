@@ -16,11 +16,13 @@ SUBSCRIPTION_NAME = 'predictor'
 
 LOCAL_SQLALCHEMY_DATABASE_URI = 'postgresql://localhost/crypto'    
     
+
+DB_IP = "104.155.151.224"
+
 # When running on App Engine a unix socket is used to connect to the cloudsql
 # instance.
 LIVE_SQLALCHEMY_DATABASE_URI = (
-    'postgresql://{user}:{password}@localhost/{database}'
-    '?unix_socket=/cloudsql/{connection_name}').format(
+    'postgresql://{user}:{password}@{ip}/{database}').format(
         user=CLOUDSQL_USER, password=CLOUDSQL_PASSWORD,
         database=CLOUDSQL_DATABASE, connection_name=CLOUDSQL_CONNECTION_NAME)
 
