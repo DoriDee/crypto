@@ -40,8 +40,8 @@ METADTA_FLAVOR = {'Metadata-Flavor' : 'Google'}
 
 # # Get the metadata related to the instance using the metadata server
 PROJECT_ID = requests.get(METADATA_URL_PROJECT + 'project-id', headers=METADTA_FLAVOR).text
-INSTANCE_ID = requests.get(METADATA_URL_INSTANCE + 'id', headers=METADTA_FLAVOR).text.split('.')[0]
-INSTANCE_NAME = requests.get(METADATA_URL_INSTANCE + 'hostname', headers=METADTA_FLAVOR).text
+INSTANCE_ID = requests.get(METADATA_URL_INSTANCE + 'id', headers=METADTA_FLAVOR).text
+INSTANCE_NAME = requests.get(METADATA_URL_INSTANCE + 'hostname', headers=METADTA_FLAVOR).text.split('.')[0]
 INSTANCE_ZONE_URL = requests.get(METADATA_URL_INSTANCE + 'zone', headers=METADTA_FLAVOR).text
 INSTANCE_ZONE = INSTANCE_ZONE_URL.split('/')[0]
 TOPIC_NAME = 'predictions'
@@ -132,7 +132,7 @@ def stop_instance():
 
     print("Going to stop. proj={0} zone={1} instance={2}".format(PROJECT_ID, INSTANCE_ZONE, INSTANCE_NAME))
     Logger.log_writer("Going to stop. proj={0} zone={1} instance={2}".format(PROJECT_ID, INSTANCE_ZONE, INSTANCE_NAME))
-    
+
     request = service.instances().stop(project=PROJECT_ID, zone=INSTANCE_ZONE, instance=INSTANCE_NAME)
     response = request.execute()
 
