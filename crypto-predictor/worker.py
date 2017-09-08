@@ -43,7 +43,7 @@ PROJECT_ID = requests.get(METADATA_URL_PROJECT + 'project-id', headers=METADTA_F
 INSTANCE_ID = requests.get(METADATA_URL_INSTANCE + 'id', headers=METADTA_FLAVOR).text
 INSTANCE_NAME = requests.get(METADATA_URL_INSTANCE + 'hostname', headers=METADTA_FLAVOR).text.split('.')[0]
 INSTANCE_ZONE_URL = requests.get(METADATA_URL_INSTANCE + 'zone', headers=METADTA_FLAVOR).text
-INSTANCE_ZONE = INSTANCE_ZONE_URL.split('/')[0]
+INSTANCE_ZONE = INSTANCE_ZONE_URL.split('/')[-1]
 TOPIC_NAME = 'predictions'
 SUBSCRIPTION_NAME = 'predictions-sub'
 BUCKET_NAME = 'coins-history'
@@ -130,10 +130,10 @@ def stop_instance():
 
     service = discovery.build('compute', 'beta', credentials=credentials)
 
-    print("Going to stop. proj={0} zone={1} instance={2}".format(PROJECT_ID, INSTANCE_ZONE_URL, INSTANCE_NAME))
-    Logger.log_writer("Going to stop. proj={0} zone={1} instance={2}".format(PROJECT_ID, INSTANCE_ZONE_URL, INSTANCE_NAME))
+    print("Going to stop. proj={0} zone={1} instance={2}".format(PROJECT_ID, INSTANCE_ZONE, INSTANCE_NAME))
+    Logger.log_writer("Going to stop. proj={0} zone={1} instance={2}".format(PROJECT_ID, INSTANCE_ZONE, INSTANCE_NAME))
 
-    request = service.instances().stop(project=PROJECT_ID, zone=INSTANCE_ZONE_URL, instance=INSTANCE_NAME)
+    request = service.instances().stop(project=PROJECT_ID, zone=INSTANCE_ZONE, instance=INSTANCE_NAME)
     response = request.execute()
 
 def parse_files():
