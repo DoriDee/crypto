@@ -130,10 +130,10 @@ def stop_instance():
 
     service = discovery.build('compute', 'beta', credentials=credentials)
 
-    print("Going to stop. proj={0} zone={1} instance={2}".format(PROJECT_ID, INSTANCE_ZONE, INSTANCE_NAME))
-    Logger.log_writer("Going to stop. proj={0} zone={1} instance={2}".format(PROJECT_ID, INSTANCE_ZONE, INSTANCE_NAME))
+    print("Going to stop. proj={0} zone={1} instance={2}".format(PROJECT_ID, INSTANCE_ZONE_URL, INSTANCE_NAME))
+    Logger.log_writer("Going to stop. proj={0} zone={1} instance={2}".format(PROJECT_ID, INSTANCE_ZONE_URL, INSTANCE_NAME))
 
-    request = service.instances().stop(project=PROJECT_ID, zone=INSTANCE_ZONE, instance=INSTANCE_NAME)
+    request = service.instances().stop(project=PROJECT_ID, zone=INSTANCE_ZONE_URL, instance=INSTANCE_NAME)
     response = request.execute()
 
 def parse_files():
