@@ -68,7 +68,7 @@ def main():
 
     Logger.log_writer("Going to stop now byeeee!!!")
 
-    # stop_instance()
+    stop_instance()
 
     return
 
