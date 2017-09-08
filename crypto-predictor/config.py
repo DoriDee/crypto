@@ -8,7 +8,7 @@ TOPIC_NAME = 'predictions'
 DATA_BACKEND = 'cloudsql'
 
 CLOUDSQL_USER = 'postgres'
-CLOUDSQL_PASSWORD = '5KNIhq26yhPny2pf'
+CLOUDSQL_PASSWORD = 'PeGmqB22H8Jz0rNd'
 CLOUDSQL_DATABASE = 'cryptodb'
 CLOUDSQL_CONNECTION_NAME = 'cryptopred:us-central1:cryptodb'
 
@@ -18,7 +18,7 @@ LOCAL_SQLALCHEMY_DATABASE_URI = 'postgresql://localhost/crypto'
     # 'mysql+pymysql://{user}:{password}@127.0.0.1:3306/{database}').format(
     #     user=CLOUDSQL_USER, password=CLOUDSQL_PASSWORD,
     #     database=CLOUDSQL_DATABASE)
-DB_IP = "104.155.151.224"
+DB_IP = "35.188.203.170"
 
 # When running on App Engine a unix socket is used to connect to the cloudsql
 # instance.
@@ -29,7 +29,7 @@ DB_IP = "104.155.151.224"
 #         database=CLOUDSQL_DATABASE, connection_name=CLOUDSQL_CONNECTION_NAME)
 
 
-LIVE_SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:5KNIhq26yhPny2pf@104.155.151.224/postgres'
+LIVE_SQLALCHEMY_DATABASE_URI = 'postgresql://postgres:PeGmqB22H8Jz0rNd@35.188.203.170/postgres'
 
 # LIVE_SQLALCHEMY_DATABASE_URI = (
 #     'postgresql://{user}:{password}@{ip}/postgres').format(
