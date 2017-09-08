@@ -14,6 +14,8 @@
 
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
+import time, datetime
+from datetime import timedelta, date
 
 builtin_list = list
 
@@ -65,6 +67,16 @@ def list(date, limit=10, cursor=None):
 # [END list]
 
 
+def get_last_prediction(coin_symbol):
+    print("Date: {0} Symbol: {1}".format(date.today() - timedelta(1), coin_symbol))
+
+    result = Prediction.query.filter(Prediction.predicted_at == date.today() - timedelta(1), 
+                                    Prediction.coin_symbol == coin_symbol).first()
+
+    if not result:
+        return None
+    return from_sql(result)
+
 # [START read]
 def read(id):
     result = Prediction.query.get(id)
@@ -73,13 +85,24 @@ def read(id):
     return from_sql(result)
 # [END read]
 
+def is_exists(coin_symbol):
+    result = Prediction.query.filter(Prediction.predicted_at == date.today(), 
+                                     Prediction.coin_symbol == coin_symbol).first()
+
+    return result
 
 # [START create]
 def create(data):
-    prediction = Prediction(**data)
-    db.session.add(prediction)
-    db.session.commit()
-    return from_sql(prediction)
+    if (not is_exists(data['coin_symbol'])):
+        prediction = Prediction(**data)
+        db.session.add(prediction)
+        db.session.commit()
+        return from_sql(prediction)
+    else:
+        print("Coin: {0} already exists for date: {1}".format(data['coin_symbol'], date.today()))
+        return None
+
+    
 # [END create]
 
 

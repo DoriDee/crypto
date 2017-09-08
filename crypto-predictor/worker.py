@@ -25,6 +25,8 @@ import click
 from google.cloud import pubsub
 from google.cloud import storage
 from google.cloud import error_reporting
+from googleapiclient import discovery
+from oauth2client.client import GoogleCredentials
 
 from logger import Logger
 from recurror import Recurror
@@ -36,7 +38,7 @@ METADATA_URL_PROJECT = "http://metadata/computeMetadata/v1/project/"
 METADATA_URL_INSTANCE = "http://metadata/computeMetadata/v1/instance/"
 METADTA_FLAVOR = {'Metadata-Flavor' : 'Google'}
 
-# Get the metadata related to the instance using the metadata server
+# # Get the metadata related to the instance using the metadata server
 PROJECT_ID = requests.get(METADATA_URL_PROJECT + 'project-id', headers=METADTA_FLAVOR).text
 INSTANCE_ID = requests.get(METADATA_URL_INSTANCE + 'id', headers=METADTA_FLAVOR).text
 INSTANCE_NAME = requests.get(METADATA_URL_INSTANCE + 'hostname', headers=METADTA_FLAVOR).text
@@ -53,23 +55,22 @@ def main():
     """
 
     client = error_reporting.Client()
-    #COOCOOOOO!!!!!!! WAT???
-    data = {'coin_symbol': 'LTC', 'last_value': 555, 'prediction': 1231, 'real_value': 123, 'market_cap': 11919, 'predicted_at': datetime.datetime.now()}
-
-    model_predictions.connect()
-    prediction = model_predictions.create(data)
-
-    return
     topic = pubsub_client.topic(TOPIC_NAME)
     subscription = topic.subscription(SUBSCRIPTION_NAME)
 
-    Logger.log_writer("Main entry!!!")
+    Logger.log_writer("Main entry Hiii f!!!")
 
     if not subscription.exists():
         sys.stderr.write('Cannot find subscription {0}\n'.format(sys.argv[1]))
         return
 
     Logger.log_writer("Wallak exists akakakak!!!")
+
+    Logger.log_writer("Going to stop now byeeee!!!")
+
+    stop_instance()
+
+    return
 
     r = Recurror(REFRESH_INTERVAL - 10, postpone_ack)
 
@@ -124,6 +125,14 @@ def main():
         client.report_exception()
 
 
+def stop_instance():
+    credentials = GoogleCredentials.get_application_default()
+
+    service = discovery.build('compute', 'beta', credentials=credentials)
+
+    request = service.instances().stop(project=PROJECT_ID, zone=INSTANCE_ZONE, instance=INSTANCE_ID)
+    response = request.execute()
+
 def parse_files():
     bucket = gcs_client.get_bucket(BUCKET_NAME)
     blobs = bucket.list_blobs()
@@ -146,6 +155,23 @@ def parse_files():
 
             Logger.log_writer("Created a prediction for:{0} last_value:{1} prediction:{2} marketcap:{3}".format(blob.name,last_value,prediction,market_cap))
 
+            save_prediction(blob.name, last_value, prediction, market_cap)
+
+
+def save_prediction(coin_symbol, last_value, prediction, market_cap):
+    
+    model_predictions.connect()
+
+    # Save the new prediction
+    data = {'coin_symbol': coin_symbol, 'last_value': last_value, 'prediction': prediction, 'market_cap': market_cap, 'predicted_at': datetime.datetime.now()}
+    prediction = model_predictions.create(data)
+
+    # Update the last prediction real value
+    last_pred = model_predictions.get_last_prediction(coin_symbol)
+    if last_pred:
+        print("lastPred:{0}".format(last_pred))
+        model_predictions.update({'real_value': last_value}, last_pred['id'])
+    
 
 # https://github.com/GoogleCloudPlatform/pubsub-media-processing/blob/master/worker.py
 def parse_bucket_object(params):
